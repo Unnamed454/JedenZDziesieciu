@@ -15,8 +15,11 @@ public class BazaDanych {
 		String pytanie, odpowiedz;
 		while(in.hasNext()){
 			System.out.println("a");
-			String odp = in.next();
-			String pyt = in.next();
+			
+			String pyt = in.nextLine();
+			System.out.println(pyt);
+			String odp = in.nextLine();
+			System.out.println(odp);
 			pytania.add(new Rekord(pyt,odp));
 		}
 		

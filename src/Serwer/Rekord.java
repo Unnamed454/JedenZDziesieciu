@@ -18,5 +18,10 @@ public class Rekord {
 		return this.odpowiedz;
 		
 	}
-	
+	public boolean sprawdzOdpowiedz(String odpowiedz){
+		if (odpowiedz.equalsIgnoreCase(this.odpowiedz))
+		return true;
+		else
+		return false;
+	}
 }
