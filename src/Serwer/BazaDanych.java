@@ -1,6 +1,7 @@
 package Serwer;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -24,11 +25,10 @@ public class BazaDanych {
 		}
 		
 	}
-	public static void main(String[] args) throws FileNotFoundException {
-		BazaDanych db = new BazaDanych("cwdb.txt");
-		System.out.println(db.pytania.size());
-		for(int i=0; i<db.pytania.size();i++){
-			System.out.println(db.pytania.get(i).getPytanie()+ "    " +db.pytania.get(i).getOdpowiedz());
-		}
+	public Rekord losujRekord(){
+		Random rand = new Random();
+		return this.pytania.get(rand.nextInt(pytania.size()));
+	
 	}
+
 }
