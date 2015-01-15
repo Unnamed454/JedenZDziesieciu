@@ -9,40 +9,34 @@ import java.net.Socket;
 public class Serwer {
 	private Obserwator obserwator;
 	private ServerSocket server;
-    private int port = 9996;
- 
-    public Serwer() throws IOException {
-        
+    private int port = 930;
+    private Socket socket;
+    private int current = 1;
+    
+    public Serwer() throws IOException{
             server = new ServerSocket(port);
-            obserwator = new Obserwator();
-        
+            server.setReuseAddress(true);
     }
  
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         Serwer example = new Serwer();
         example.zbierzGraczy();
-       
-      
     }
-    public void zbierzGraczy() throws IOException{
-        System.out.println("Waiting for client message...");
-        
-        //
-        // Petla do akceptowania kolejnych klientow
-        // 
-        //
-        GraczKomunikacja tablicaGraczy[] = new GraczKomunikacja[10];
-        for(int i=0; i<10; i++) {
-        	
-        	
-                Socket socket = server.accept();
-                tablicaGraczy[i] = new GraczKomunikacja(socket);
-                System.out.println(i);
-            
-        }
-     obserwator = new Obserwator(tablicaGraczy);   
     
-}
+    public void zbierzGraczy() throws IOException, InterruptedException{
+	    System.out.println("Waiting for client message...");
+
+	    GraczKomunikacja tablicaGraczy[] = new GraczKomunikacja[10];
+	    for(int i=0; i<10; i++) {
+	            socket = server.accept();
+	            tablicaGraczy[i] = new GraczKomunikacja(socket);
+	            System.out.println(i);
+	    }
+	    Thread.sleep(1000);
+	    tablicaGraczy.notifyAll();
+	    
+	    obserwator = new Obserwator(tablicaGraczy);
+    }
 }
  
 

@@ -10,11 +10,12 @@ public class Gracz{
 	private String nazwaHosta;
 	private int port;
 	private int szanse = 3;
+	private int etap = 1;
+	private int punkty = 0;
 	
 	Socket gniazdo;
 	
-	Gracz(String nazwaHosta, int port){
-		this.nazwaHosta = nazwaHosta;
+	Gracz(int port){
 		this.port = port;
 	}
 	
@@ -31,27 +32,30 @@ public class Gracz{
 	}
 	
 	public void polacz() throws UnknownHostException, IOException{
-        System.out.println("£¹czenie do "+ nazwaHosta + ":" + port);
-       // gniazdo = new Socket(nazwaHosta, port);
-        ustalStan(new Odpowiada());
-        System.out.println("Po³¹czono");   
+        InetAddress host = InetAddress.getLocalHost();
+        gniazdo = new Socket(host.getHostName(), port);
+        ustalStan(new Czeka());
+        System.out.println("Do³¹czono do gry!");
 	}
 	
-	public void wyslijOdpowiedz() throws IOException{
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(gniazdo.getOutputStream()));
+	public void wyslijOdpowiedz() throws IOException, ClassNotFoundException{
 		Scanner scanner = new Scanner(System.in);
-		String odpowiedz = scanner.next();
-		writer.write(odpowiedz);
-		writer.newLine();
-		writer.flush();
+		String odpowiedz = scanner.nextLine();
 		scanner.close();
 		
-		String odSerwera;
-		BufferedReader czytaj = new BufferedReader(new InputStreamReader(gniazdo.getInputStream()));
+		new ObjectOutputStream(gniazdo.getOutputStream()).writeObject(odpowiedz);
 		
-		odSerwera = czytaj.readLine();
-		if(odSerwera == "Y") ustalStan(new Wyznacza());
-		else if(odSerwera == "N") {
+		String odSerwera = (String) new ObjectInputStream(gniazdo.getInputStream()).readObject();
+
+		if(odSerwera.equals("Y")) {
+			if(etap == 1) ustalStan(new Czeka());
+			else if(etap == 2) ustalStan(new Wyznacza());
+			else if(etap == 3){
+				ustalStan(new Wyznacza());
+				punkty += 10;
+			}
+		}
+		else if(odSerwera.equals("N")) {
 			if(szanse != 0) {
 				zmniejszSzanse();
 				ustalStan(new Czeka());
@@ -60,25 +64,21 @@ public class Gracz{
 		}
 	}
 	
-	public void czekaj() throws IOException{
-		String odSerwera;
-		BufferedReader czytaj = new BufferedReader(new InputStreamReader(gniazdo.getInputStream()));
-		
-		odSerwera = czytaj.readLine();
-		
-		if(odSerwera == "Y") ustalStan(new Odpowiada());
-		else if(odSerwera == "N") return;
+	public void czekaj() throws IOException, ClassNotFoundException {
+		String odSerwera = (String) new ObjectInputStream(gniazdo.getInputStream()).readObject();
+
+		if(odSerwera.equals("Y")) ustalStan(new Odpowiada());
+		else if(odSerwera.equals("++")) etap++;
+		else if(odSerwera.equals("N")) return;
 	}
 	
 	public void wyznacz() throws IOException{ //ta odpowiedz musi byæ parsowana do inta - to bedzie nr od 1 do 10 ktory nastepny czlowieczek odpowiada
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(gniazdo.getOutputStream()));
+		
 		Scanner scanner = new Scanner(System.in);
-		String odpowiedz = scanner.next();
-		writer.write(odpowiedz);
-		writer.newLine();
-		writer.flush();
+		String odpowiedz = scanner.nextLine();
 		scanner.close();
 		
+		new ObjectOutputStream(gniazdo.getOutputStream()).writeObject(odpowiedz);
 		ustalStan(new Czeka());
 	}
 	
@@ -86,16 +86,10 @@ public class Gracz{
 		
 	}
 	
-	public static void main(String arg[]) throws UnknownHostException, IOException{
-		Scanner scanner = new Scanner(System.in);
-		String nazwaHosta = new String();
-		int port = 9999;
+	public static void main(String arg[]) throws UnknownHostException, IOException, ClassNotFoundException{
+		int port = 930;
 		
-		System.out.println("Podaj nazwê hosta: ");
-		nazwaHosta = scanner.next();
-		
-		scanner.close();
-		Gracz gracz = new Gracz(nazwaHosta, port);
+		Gracz gracz = new Gracz(port);
 		gracz.polacz();
 		
 		while(true){

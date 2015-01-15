@@ -6,43 +6,37 @@ import java.net.Socket;
 
 class GraczKomunikacja implements Runnable {
     private Socket socket;
-    private ObjectInputStream ois;
-    private  ObjectOutputStream oos;
-    private String stringDoWyslania;
-    private String otrzymanyOdKlienta;
+    private int gotSomeData;
+    private Integer szanse = 0;
+    private Integer punkty = 0;
  
     public GraczKomunikacja(Socket socket) throws IOException {
         this.socket = socket;
-        ois = new ObjectInputStream(socket.getInputStream());
-        oos = new ObjectOutputStream(socket.getOutputStream());
  
         Thread t = new Thread(this);
         t.start();
     }
     public void wyslij(String msg) throws IOException{
-    	oos.writeObject(msg);
+    	new ObjectOutputStream(socket.getOutputStream()).writeObject(msg);
     }
  
-    public void run() {
-        try
-        {
-            //
-            // Odczytaj klienta
-            //
-            
+    public void run(){
+        try{
+        	wait();
+        	wyslij("Y:"+szanse.toString()+":"+punkty.toString());
+        	
         	while(true){
-           this.otrzymanyOdKlienta = (String) ois.readObject();
-            System.out.println("Message Received: " + this.otrzymanyOdKlienta);
- 
-            //
-            // wyslij do klienta
-      
-            this.wyslij(stringDoWyslania);
- 
+        		gotSomeData = socket.getInputStream().available();
+        		if(gotSomeData > 0) {
+        			String odKlienta = (String) new ObjectInputStream(socket.getInputStream()).readObject();
+        		}
+        		else{Thread.sleep(100);}
         	}
-        } catch (IOException e) {
+        }catch (IOException e){
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }catch(ClassNotFoundException e){
             e.printStackTrace();
         }
     }
