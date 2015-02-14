@@ -10,7 +10,7 @@ public class Gracz implements Obserwator{
 	private int port;
 	private int szanse = 3;
 	private int etap = 1;
-	//private int punkty = 0;
+	private int id;
 	
 	Socket gniazdo;
 	
@@ -18,7 +18,7 @@ public class Gracz implements Obserwator{
 		this.port = port;
 	}
 	
-	@Override
+
 	public void update(){
 		
 	}
@@ -39,12 +39,18 @@ public class Gracz implements Obserwator{
 		szanse--;
 	}
 	
-	public void polacz() throws UnknownHostException, IOException{
+	public void polacz() throws UnknownHostException, IOException, ClassNotFoundException{
         InetAddress host = InetAddress.getLocalHost();
         gniazdo = new Socket(host.getHostName(), port);
+      /*  
+        Integer id_s = (Integer) new ObjectInputStream(gniazdo.getInputStream()).readObject();
+        this.id = id_s.intValue();*/
+        ObjectInputStream ois = new ObjectInputStream(gniazdo.getInputStream());
+        Object a = ois.readObject();
+       System.out.println(id);
+        System.out.println("Do³¹czono do gry! Twoje id: " + Integer.toString(id));
         ustalStan(new Czeka());
-        System.out.println("Do³¹czono do gry!");
-	}
+    }
 	
 	public int getEtap(){return etap;};
 	
@@ -55,7 +61,7 @@ public class Gracz implements Obserwator{
 	}
 	
 	public static void main(String arg[]) throws UnknownHostException, IOException, ClassNotFoundException{
-		int port = 930;
+		int port = 9305;
 		
 		Gracz gracz = new Gracz(port);
 		gracz.polacz();

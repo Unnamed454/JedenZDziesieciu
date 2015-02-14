@@ -4,26 +4,28 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-class GraczKomunikacja implements Runnable {
+class GraczKomunikacja {
     private Socket socket;
     private int gotSomeData;
-    private Integer szanse = 0;
-    private Integer punkty = 0;
+    private int szanse = 0;
+    private int punkty = 0;
  
-    public GraczKomunikacja(Socket socket) throws IOException {
+    public GraczKomunikacja(Socket socket,int id) throws IOException, ClassNotFoundException, InterruptedException {
         this.socket = socket;
+        this.komunikuj(id);
  
-        Thread t = new Thread(this);
-        t.start();
+  
     }
     public void wyslij(String msg) throws IOException{
     	new ObjectOutputStream(socket.getOutputStream()).writeObject(msg);
+    	System.out.println(msg);
     }
  
-    public void run(){
-        try{
-        	wait();
-        	wyslij("Y:"+szanse.toString()+":"+punkty.toString());
+    public void komunikuj(int id) throws IOException, InterruptedException, ClassNotFoundException{
+        
+        	
+        	//wyslij("Y:"+ szanse +":"+ punkty );
+        	wyslij(Integer.toString(++id));
         	
         	while(true){
         		gotSomeData = socket.getInputStream().available();
@@ -32,12 +34,5 @@ class GraczKomunikacja implements Runnable {
         		}
         		else{Thread.sleep(100);}
         	}
-        }catch (IOException e){
-            e.printStackTrace();
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }catch(ClassNotFoundException e){
-            e.printStackTrace();
-        }
-    }
-}
+     
+}}
