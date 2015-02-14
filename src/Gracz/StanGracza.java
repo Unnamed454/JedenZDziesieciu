@@ -1,5 +1,5 @@
 package Gracz;
 
 public interface StanGracza {
-	void raport(Gracz gracz);
+	void graj(Gracz gracz);
 }

@@ -2,21 +2,29 @@ package Gracz;
 
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
 
-public class Gracz{
+public class Gracz implements Obserwator{
 	private StanGracza stan;
 	
 	private String nazwaHosta;
 	private int port;
 	private int szanse = 3;
 	private int etap = 1;
-	private int punkty = 0;
+	//private int punkty = 0;
 	
 	Socket gniazdo;
 	
 	Gracz(int port){
 		this.port = port;
+	}
+	
+	@Override
+	public void update(){
+		
+	}
+	
+	public void dzialaj(){
+		stan.graj(this);
 	}
 	
 	public StanGracza podajStan(){
@@ -38,49 +46,9 @@ public class Gracz{
         System.out.println("Do³¹czono do gry!");
 	}
 	
-	public void wyslijOdpowiedz() throws IOException, ClassNotFoundException{
-		Scanner scanner = new Scanner(System.in);
-		String odpowiedz = scanner.nextLine();
-		scanner.close();
-		
-		new ObjectOutputStream(gniazdo.getOutputStream()).writeObject(odpowiedz);
-		
-		String odSerwera = (String) new ObjectInputStream(gniazdo.getInputStream()).readObject();
-
-		if(odSerwera.equals("Y")) {
-			if(etap == 1) ustalStan(new Czeka());
-			else if(etap == 2) ustalStan(new Wyznacza());
-			else if(etap == 3){
-				ustalStan(new Wyznacza());
-				punkty += 10;
-			}
-		}
-		else if(odSerwera.equals("N")) {
-			if(szanse != 0) {
-				zmniejszSzanse();
-				ustalStan(new Czeka());
-			}
-			else ustalStan(new Przegral());
-		}
-	}
+	public int getEtap(){return etap;};
 	
-	public void czekaj() throws IOException, ClassNotFoundException {
-		String odSerwera = (String) new ObjectInputStream(gniazdo.getInputStream()).readObject();
-
-		if(odSerwera.equals("Y")) ustalStan(new Odpowiada());
-		else if(odSerwera.equals("++")) etap++;
-		else if(odSerwera.equals("N")) return;
-	}
-	
-	public void wyznacz() throws IOException{ //ta odpowiedz musi byæ parsowana do inta - to bedzie nr od 1 do 10 ktory nastepny czlowieczek odpowiada
-		
-		Scanner scanner = new Scanner(System.in);
-		String odpowiedz = scanner.nextLine();
-		scanner.close();
-		
-		new ObjectOutputStream(gniazdo.getOutputStream()).writeObject(odpowiedz);
-		ustalStan(new Czeka());
-	}
+	public int getSzanse() {return szanse;}
 	
 	public void odlacz(){
 		
@@ -93,18 +61,19 @@ public class Gracz{
 		gracz.polacz();
 		
 		while(true){
-			if(gracz.podajStan() instanceof Czeka){
-				gracz.czekaj();
-			}
-			else if(gracz.podajStan() instanceof Odpowiada){
-				gracz.wyslijOdpowiedz();
-			}
-			else if(gracz.podajStan() instanceof Wyznacza){
-				gracz.wyznacz();
-			}
-			else if(gracz.podajStan() instanceof Przegral){
-				gracz.odlacz();
-			}
+			gracz.dzialaj();
+//			if(gracz.podajStan() instanceof Czeka){
+//				gracz.czekaj();
+//			}
+//			else if(gracz.podajStan() instanceof Odpowiada){
+//				gracz.wyslijOdpowiedz();
+//			}
+//			else if(gracz.podajStan() instanceof Wyznacza){
+//				gracz.wyznacz();
+//			}
+//			else if(gracz.podajStan() instanceof Przegral){
+//				gracz.odlacz();
+//			}
 		}
 	}
 }
