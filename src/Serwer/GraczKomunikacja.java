@@ -27,12 +27,12 @@ class GraczKomunikacja {
         	//wyslij("Y:"+ szanse +":"+ punkty );
         	wyslij(Integer.toString(++id));
         	
-        	while(true){
+        	
         		gotSomeData = socket.getInputStream().available();
         		if(gotSomeData > 0) {
         			String odKlienta = (String) new ObjectInputStream(socket.getInputStream()).readObject();
         		}
-        		else{Thread.sleep(100);}
-        	}
+        		
+        	
      
 }}

@@ -46,9 +46,10 @@ public class Gracz implements Obserwator{
         Integer id_s = (Integer) new ObjectInputStream(gniazdo.getInputStream()).readObject();
         this.id = id_s.intValue();*/
         ObjectInputStream ois = new ObjectInputStream(gniazdo.getInputStream());
-        Object a = ois.readObject();
+        this.id = Integer.valueOf((String)  ois.readObject());
+         
        System.out.println(id);
-        System.out.println("Do³¹czono do gry! Twoje id: " + Integer.toString(id));
+        System.out.println("Do³¹czono do gry! Twoje id: " + Integer.toString(this.id));
         ustalStan(new Czeka());
     }
 	
@@ -61,7 +62,7 @@ public class Gracz implements Obserwator{
 	}
 	
 	public static void main(String arg[]) throws UnknownHostException, IOException, ClassNotFoundException{
-		int port = 9305;
+		int port = 9308;
 		
 		Gracz gracz = new Gracz(port);
 		gracz.polacz();

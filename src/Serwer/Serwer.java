@@ -9,7 +9,7 @@ import java.net.Socket;
 public class Serwer {
 	private Obserwator obserwator;
 	private ServerSocket server;
-    private int port = 9305;
+    private int port = 9308;
     private Socket socket;
     private int current = 1;
     
