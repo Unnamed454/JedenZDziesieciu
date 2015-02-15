@@ -10,6 +10,7 @@ public class Wyznacza implements StanGracza{
 	public void graj(Gracz gracz){
 		do{
 			System.out.println("Podaj nastepnego odpowiadaj¹cego(1-10)");
+			
 			Scanner scanner = new Scanner(System.in);
 			String odpowiedz = scanner.nextLine();
 			scanner.close();

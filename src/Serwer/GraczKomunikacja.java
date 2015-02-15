@@ -1,11 +1,12 @@
 package Serwer;
 
 import java.io.IOException;
+import Polecenia.Polecenie;
 //import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-class GraczKomunikacja {
+public class GraczKomunikacja {
     private Socket socket;
 //    private int gotSomeData;
  
@@ -14,9 +15,8 @@ class GraczKomunikacja {
         this.komunikuj(id);
     }
     
-    public void wyslij(String msg) throws IOException{
-    	new ObjectOutputStream(socket.getOutputStream()).writeObject(msg);
-    	System.out.println(msg);
+    public void wyslij(Polecenie polecenie) throws IOException{
+    	new ObjectOutputStream(socket.getOutputStream()).writeObject(polecenie);
     }
  
     public void komunikuj(int id) throws IOException, InterruptedException, ClassNotFoundException{

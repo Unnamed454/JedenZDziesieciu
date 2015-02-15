@@ -6,5 +6,4 @@ public class Przegral implements StanGracza {
 	public void graj(Gracz gracz) {
 		gracz.odlacz();
 	}
-
 }

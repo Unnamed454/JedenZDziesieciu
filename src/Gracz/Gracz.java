@@ -19,12 +19,8 @@ public class Gracz implements Obserwator{
 	Gracz(int port){
 		this.port = port;
 	}
-
-	public void update(){
-		
-	}
 	
-	public void aktualizujTablice(int[][] nowa){
+	public void update(int[][] nowa){
 		tablicaWynikow = new int[nowa.length][];
 		for(int i = 0; i < nowa.length; i++)
 			tablicaWynikow[i] = nowa[i].clone();

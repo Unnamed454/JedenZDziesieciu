@@ -7,10 +7,11 @@ public class Update implements StanGracza {
 	public void graj(Gracz gracz){		
 		try {
 			int[][] tablicaWynikow_Aktualna = (int[][]) new ObjectInputStream(gracz.getGniazdo().getInputStream()).readObject();
-			gracz.aktualizujTablice(tablicaWynikow_Aktualna);
+			gracz.update(tablicaWynikow_Aktualna);
 		}
 		catch (Exception e) {
 			System.out.println("Blad przy odbieraniu tablicy wynikow!");
 		}
+		gracz.ustalStan(new Czeka());
 	}
 }

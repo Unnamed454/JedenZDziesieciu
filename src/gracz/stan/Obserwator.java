@@ -1,5 +1,5 @@
 package Gracz.stan;
 
 public interface Obserwator {
-	public void update();
+	public void update(int[][] nowa);
 }

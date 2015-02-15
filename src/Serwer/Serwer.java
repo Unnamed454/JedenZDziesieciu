@@ -11,11 +11,16 @@ public class Serwer implements Obserwowany{
     private int port = 9308;
     private Socket socket;
     private Strategia etap;
-    GraczKomunikacja tablicaGraczy[] = new GraczKomunikacja[10];
-    
+    private GraczKomunikacja tablicaGraczy[] = new GraczKomunikacja[10];
+	private int tablicaWynikow[][] = new int[10][2];
+
     public Serwer() throws IOException{
             server = new ServerSocket(port);
             server.setReuseAddress(true);
+    }
+    
+   public GraczKomunikacja getGracz(int id){
+    	return tablicaGraczy[--id];
     }
     
     public void ustawEtap(String etap){
@@ -33,18 +38,17 @@ public class Serwer implements Obserwowany{
     }
     
     public void graj(){
-    	etap.graj();
+    	etap.graj(this);
     }
     
 	public void powiadamiaj(){
 		for(GraczKomunikacja k : tablicaGraczy){
 			try {
-				k.wyslij("");
+				k.wyslij(tablicaWynikow);
 			} catch (IOException e) {
 				System.out.println("Wysylanie tablicy - jakis blad!");
 			}
 		}
-		
 	}
 
 	public void dodajObserwatora() {
@@ -57,6 +61,21 @@ public class Serwer implements Obserwowany{
 		
 	}
     
+	public int[] getWynik(int id){
+		return tablicaWynikow[--id];
+	}
+	
+	public void setWynik(int id, String dodac_odjac, int punkty){
+		switch(dodac_odjac){
+		case "dodac":
+			tablicaWynikow[--id][1] += punkty;
+			break;
+		case "odjac":
+			tablicaWynikow[--id][0] -= 1;
+			break;
+		}
+	}
+	
     public void zbierzGraczy() throws IOException, InterruptedException, ClassNotFoundException{
 	    System.out.println("Waiting for client message...");
 
@@ -73,6 +92,10 @@ public class Serwer implements Obserwowany{
         serwer.zbierzGraczy();
 
 	    serwer.ustawEtap("Etap_I");
+	    serwer.graj();
+	    serwer.ustawEtap("Etap_II");
+	    serwer.graj();
+	    serwer.ustawEtap("Etap_III");
 	    serwer.graj();
     }
 }
