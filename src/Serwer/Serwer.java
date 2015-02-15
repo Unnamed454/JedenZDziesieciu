@@ -11,6 +11,7 @@ public class Serwer implements Obserwowany{
     private int port = 9308;
     private Socket socket;
     private Strategia etap;
+    GraczKomunikacja tablicaGraczy[] = new GraczKomunikacja[10];
     
     public Serwer() throws IOException{
             server = new ServerSocket(port);
@@ -35,8 +36,14 @@ public class Serwer implements Obserwowany{
     	etap.graj();
     }
     
-	public void powiadamiaj() {
-		// TODO Auto-generated method stub
+	public void powiadamiaj(){
+		for(GraczKomunikacja k : tablicaGraczy){
+			try {
+				k.wyslij("");
+			} catch (IOException e) {
+				System.out.println("Wysylanie tablicy - jakis blad!");
+			}
+		}
 		
 	}
 
@@ -53,7 +60,7 @@ public class Serwer implements Obserwowany{
     public void zbierzGraczy() throws IOException, InterruptedException, ClassNotFoundException{
 	    System.out.println("Waiting for client message...");
 
-	    GraczKomunikacja tablicaGraczy[] = new GraczKomunikacja[10];
+	    
 	    for(int i=0; i<10; i++) {
 	            socket = server.accept();
 	            tablicaGraczy[i] = new GraczKomunikacja(socket,i);

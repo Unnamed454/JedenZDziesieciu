@@ -12,7 +12,7 @@ public class Gracz implements Obserwator{
 	private int szanse = 3;
 	private int etap = 1;
 	private int id;
-	private int tablicaWynikow;
+	private int tablicaWynikow[][];
 	
 	Socket gniazdo;
 	
@@ -22,6 +22,12 @@ public class Gracz implements Obserwator{
 
 	public void update(){
 		
+	}
+	
+	public void aktualizujTablice(int[][] nowa){
+		tablicaWynikow = new int[nowa.length][];
+		for(int i = 0; i < nowa.length; i++)
+			tablicaWynikow[i] = nowa[i].clone();
 	}
 	
 	public Socket getGniazdo(){

@@ -1,13 +1,16 @@
 package Gracz.stan;
 
+import java.io.ObjectInputStream;
 import Gracz.Gracz;
 
 public class Update implements StanGracza {
-
-	@Override
-	public void graj(Gracz gracz) {
-		// TODO Auto-generated method stub
-
+	public void graj(Gracz gracz){		
+		try {
+			int[][] tablicaWynikow_Aktualna = (int[][]) new ObjectInputStream(gracz.getGniazdo().getInputStream()).readObject();
+			gracz.aktualizujTablice(tablicaWynikow_Aktualna);
+		}
+		catch (Exception e) {
+			System.out.println("Blad przy odbieraniu tablicy wynikow!");
+		}
 	}
-
 }

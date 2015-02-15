@@ -1,18 +1,22 @@
 package Gracz.stan;
 
 import Gracz.Gracz;
+import Polecenia.*;
 import java.io.ObjectInputStream;
 
 public class Czeka implements StanGracza{
-	@Override
 	public void graj(Gracz gracz){
 		try{
-			String odSerwera = (String) new ObjectInputStream(gracz.getGniazdo().getInputStream()).readObject();
+			Polecenie odSerwera = (Polecenie) new ObjectInputStream(gracz.getGniazdo().getInputStream()).readObject();
 			
-			if(odSerwera.equals("Y")) gracz.ustalStan(new Odpowiada());
-			if(odSerwera.equals("Up")) gracz.ustalStan(new Update());
-			//else if(odSerwera.equals("++")) gracz.etap++;
-			//else if(odSerwera.equals("N")) return;
+			if(odSerwera instanceof Czekasz) gracz.ustalStan(new Czeka());
+			if(odSerwera instanceof Odpowiadasz){
+				odSerwera.czytaj();
+				gracz.ustalStan(new Odpowiada());
+			}
+			if(odSerwera instanceof Odpadasz) gracz.ustalStan(new Przegral());
+			if(odSerwera instanceof Wyznaczasz) gracz.ustalStan(new Wyznacza());
+			if(odSerwera instanceof Aktualizuj) gracz.ustalStan(new Update());
 		}
 		catch(Exception e){
 			System.out.println("B³¹d przy odczytywaniu!");
