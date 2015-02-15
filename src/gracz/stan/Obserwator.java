@@ -1,4 +1,4 @@
-package gracz.stan;
+package Gracz.stan;
 
 public interface Obserwator {
 	public void update();

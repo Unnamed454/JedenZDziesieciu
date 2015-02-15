@@ -1,6 +1,6 @@
-package gracz.stan;
+package Gracz.stan;
 
-import gracz.Gracz;
+import Gracz.Gracz;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

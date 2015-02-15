@@ -1,6 +1,6 @@
-package gracz;
+package Gracz;
 
-import gracz.stan.*;
+import Gracz.stan.*;
 
 import java.io.*;
 import java.net.*;

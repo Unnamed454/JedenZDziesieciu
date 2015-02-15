@@ -1,4 +1,4 @@
-package serwer;
+package Serwer;
 
 
 public class Gra {

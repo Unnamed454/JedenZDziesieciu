@@ -1,4 +1,4 @@
-package serwer.obserwator;
+package Serwer.obserwator;
 
 public interface Obserwowany {
 	public void powiadamiaj();

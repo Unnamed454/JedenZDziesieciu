@@ -1,10 +1,10 @@
-package serwer;
+package Serwer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import serwer.strategia.*;
-import serwer.obserwator.Obserwowany;
+import Serwer.strategia.*;
+import Serwer.obserwator.Obserwowany;
 
 public class Serwer implements Obserwowany{
 	private ServerSocket server;

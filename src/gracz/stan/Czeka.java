@@ -1,6 +1,6 @@
-package gracz.stan;
+package Gracz.stan;
 
-import gracz.Gracz;
+import Gracz.Gracz;
 import java.io.ObjectInputStream;
 
 public class Czeka implements StanGracza{

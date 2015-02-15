@@ -1,6 +1,6 @@
-package gracz.stan;
+package Gracz.stan;
 
-import gracz.Gracz;
+import Gracz.Gracz;
 
 public interface StanGracza {
 	void graj(Gracz gracz);
