@@ -1,27 +1,54 @@
-package Serwer;
+package serwer;
+
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import serwer.strategia.*;
+import serwer.obserwator.Obserwowany;
 
-
-public class Serwer {
-	private Obserwator obserwator;
+public class Serwer implements Obserwowany{
 	private ServerSocket server;
     private int port = 9308;
     private Socket socket;
-    private int current = 1;
+    private Strategia etap;
     
     public Serwer() throws IOException{
             server = new ServerSocket(port);
             server.setReuseAddress(true);
     }
- 
-    public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
-        Serwer example = new Serwer();
-        example.zbierzGraczy();
+    
+    public void ustawEtap(String etap){
+    	switch(etap){
+	    	case "Etap_I":
+	    		this.etap = new EtapI();
+	    		break;
+	    	case "Etap_II":
+	    		this.etap = new EtapII();
+	    		break;
+	    	case "Etap_III":
+	    		this.etap = new EtapIII();
+	    		break;
+    	}
     }
+    
+    public void graj(){
+    	etap.graj();
+    }
+    
+	public void powiadamiaj() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void dodajObserwatora() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void usunObserwatora() {
+		// TODO Auto-generated method stub
+		
+	}
     
     public void zbierzGraczy() throws IOException, InterruptedException, ClassNotFoundException{
 	    System.out.println("Waiting for client message...");
@@ -32,11 +59,13 @@ public class Serwer {
 	            tablicaGraczy[i] = new GraczKomunikacja(socket,i);
 	            System.out.println(i);
 	    }
-	   
-	    
-	    obserwator = new Obserwator(tablicaGraczy);
+    }
+    
+    public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
+        Serwer serwer = new Serwer();
+        serwer.zbierzGraczy();
+
+	    serwer.ustawEtap("Etap_I");
+	    serwer.graj();
     }
 }
- 
-
-

@@ -1,4 +1,6 @@
-package Gracz;
+package gracz.stan;
+
+import gracz.Gracz;
 
 import java.io.ObjectOutputStream;
 import java.util.Scanner;
@@ -10,7 +12,7 @@ public class Wyznacza implements StanGracza{
 		String odpowiedz = scanner.nextLine();
 		scanner.close();
 		try{
-			new ObjectOutputStream(gracz.gniazdo.getOutputStream()).writeObject(odpowiedz);
+			new ObjectOutputStream(gracz.getGniazdo().getOutputStream()).writeObject(odpowiedz);
 		}
 		catch(Exception e){
 			System.out.println("B³¹d przy przesy³aniu odpowiedzi!");

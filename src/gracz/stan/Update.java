@@ -1,4 +1,6 @@
-package Gracz;
+package gracz.stan;
+
+import gracz.Gracz;
 
 public class Update implements StanGracza {
 

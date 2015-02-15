@@ -1,4 +1,4 @@
-package Serwer;
+package serwer;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Random;
