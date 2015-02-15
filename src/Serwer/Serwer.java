@@ -19,8 +19,17 @@ public class Serwer implements Obserwowany{
             server.setReuseAddress(true);
     }
     
-   public GraczKomunikacja getGracz(int id){
+    public GraczKomunikacja getGracz(int id){
     	return tablicaGraczy[--id];
+    }
+    
+    public int ileGra(){
+    	int ile = 0;
+    	
+    	for(GraczKomunikacja k : tablicaGraczy){
+			if(k.czyGra() == true) ile += 1;
+		}
+    	return ile;
     }
     
     public void ustawEtap(String etap){
@@ -72,13 +81,14 @@ public class Serwer implements Obserwowany{
 			break;
 		case "odjac":
 			tablicaWynikow[--id][0] -= 1;
+			if(tablicaWynikow[id][0] == 0)
+				getGracz(id).setJuzNiegra();
 			break;
 		}
 	}
 	
     public void zbierzGraczy() throws IOException, InterruptedException, ClassNotFoundException{
 	    System.out.println("Waiting for client message...");
-
 	    
 	    for(int i=0; i<10; i++) {
 	            socket = server.accept();
@@ -93,8 +103,10 @@ public class Serwer implements Obserwowany{
 
 	    serwer.ustawEtap("Etap_I");
 	    serwer.graj();
+	    
 	    serwer.ustawEtap("Etap_II");
 	    serwer.graj();
+	    
 	    serwer.ustawEtap("Etap_III");
 	    serwer.graj();
     }

@@ -1,8 +1,6 @@
 package Serwer.strategia;
 
 import java.io.IOException;
-
-import Serwer.GraczKomunikacja;
 import Serwer.Serwer;
 import Polecenia.*;
 
@@ -17,6 +15,7 @@ public class EtapI implements Strategia {
 					//formowanie pytania t¹ fabryk¹ + sprawdzanie odpowiedzi + uaktualnianie tablicy wynikow
 					//if dobra odpowiedz to cos takiego: setWynik(aktualny, "dodac", 0);
 					//if zla dopowiedz to cos takiego: setWynik(aktualny, "odjac", 0);
+					serwer.getGracz(aktualny).wyslij(new Czekasz());
 				}
 				catch (Exception e) {
 					System.out.println("Odpowiadanie sprawdzanie odp itd");
@@ -24,7 +23,6 @@ public class EtapI implements Strategia {
 				serwer.powiadamiaj();
 				aktualny += 1;
 			}while(aktualny <= 10);
-		
 			aktualny = 1;
 		}
 		
