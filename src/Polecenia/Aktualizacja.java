@@ -1,13 +1,13 @@
 package Polecenia;
 
 public class Aktualizacja implements Polecenie {
-	String obiekt;
+	int[][] obiekt;
 	
-	public String zwrocPowiazanyObiekt(){
+	public int[][] zwrocPowiazanyObiekt(){
 		return obiekt;
 	}
 	
-	public void ustawObiekt(Object nazwa){
-		this.obiekt = "Aktualizacja";
+	public void ustawObiekt(Object tablica){
+		this.obiekt = (int[][])tablica;
 	}
 }

@@ -7,16 +7,17 @@ import java.net.Socket;
 import Polecenia.Fabryka;
 import Polecenia.FabrykaPolecen;
 import Polecenia.Polecenie;
+
 import Serwer.strategia.*;
 import Serwer.obserwator.Obserwowany;
 
 public class Serwer implements Obserwowany{
 	private ServerSocket server;
-    private int port = 9308;
+    private int port = 9611;
     private Socket socket;
     private Strategia etap;
     private GraczKomunikacja tablicaGraczy[] = new GraczKomunikacja[10];
-	private int tablicaWynikow[][] = new int[10][2];
+	private int tablicaWynikow[][] = {{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0}};
 
     public Serwer() throws IOException{
             server = new ServerSocket(port);
@@ -24,7 +25,7 @@ public class Serwer implements Obserwowany{
     }
     
     public GraczKomunikacja getGracz(int id){
-    	return tablicaGraczy[--id];
+    	return tablicaGraczy[id-1];
     }
     
     public int ileGra(){
@@ -64,7 +65,7 @@ public class Serwer implements Obserwowany{
 		for(GraczKomunikacja k : tablicaGraczy){
 			try {
 				k.wyslij(polecenie);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				System.out.println("Wysylanie tablicy - jakis blad!");
 			}
 		}
@@ -81,19 +82,19 @@ public class Serwer implements Obserwowany{
 	}
     
 	public int[] getWynik(int id){
-		return tablicaWynikow[--id];
+		return tablicaWynikow[id-1];
 	}
 	
 	public void setWynik(int id, String dodac_odjac, int punkty){
 		switch(dodac_odjac){
-		case "dodac":
-			tablicaWynikow[--id][1] += punkty;
-			break;
-		case "odjac":
-			tablicaWynikow[--id][0] -= 1;
-			if(tablicaWynikow[id][0] == 0)
-				getGracz(id).setJuzNiegra();
-			break;
+			case "dodac":
+				tablicaWynikow[id-1][1] += punkty;
+				break;
+			case "odjac":
+				tablicaWynikow[id-1][0] -= 1;
+				if(tablicaWynikow[id-1][0] == 0)
+					getGracz(id-1).setJuzNiegra();
+				break;
 		}
 	}
 	
@@ -103,7 +104,7 @@ public class Serwer implements Obserwowany{
 	    for(int i=0; i<10; i++) {
 	            socket = server.accept();
 	            tablicaGraczy[i] = new GraczKomunikacja(socket, i);
-	            System.out.println(i);
+	            System.out.println(i+1);
 	    }
     }
     

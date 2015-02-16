@@ -36,13 +36,18 @@ public class GraczKomunikacja {
     	gra = false;
     }
     
-    public GraczKomunikacja(Socket socket,int id) throws IOException, ClassNotFoundException, InterruptedException {
+    public GraczKomunikacja(Socket socket, int id) throws IOException, ClassNotFoundException, InterruptedException {
         this.socket = socket;
         this.komunikuj(id);
     }
     
     public void wyslij(Polecenie polecenie) throws IOException{
-    	new ObjectOutputStream(socket.getOutputStream()).writeObject(polecenie);
+    	try{
+    		new ObjectOutputStream(socket.getOutputStream()).writeObject(polecenie);
+    	}
+    	catch(Exception e ){
+    		System.out.println("co sie dzieje!");
+    	}
     }
  
     public void komunikuj(int id) throws IOException, InterruptedException, ClassNotFoundException{

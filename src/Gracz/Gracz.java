@@ -9,10 +9,8 @@ public class Gracz implements Obserwator{
 	private StanGracza stan;
 	
 	private int port;
-	private int szanse = 3;
-	private int etap = 1;
 	private int id;
-	private int tablicaWynikow[][];
+	private int tablicaWynikow[][] = new int[10][2];
 	
 	Socket gniazdo;
 	
@@ -20,10 +18,10 @@ public class Gracz implements Obserwator{
 		this.port = port;
 	}
 	
-	public void update(int[][] nowa){
-		tablicaWynikow = new int[nowa.length][];
-		for(int i = 0; i < nowa.length; i++)
-			tablicaWynikow[i] = nowa[i].clone();
+	public void update(int[][] integers){
+		tablicaWynikow = new int[integers.length][];
+		for(int i = 0; i < integers.length; i++)
+			tablicaWynikow[i] = integers[i].clone();
 	}
 	
 	public Socket getGniazdo(){
@@ -43,22 +41,18 @@ public class Gracz implements Obserwator{
         gniazdo = new Socket(host.getHostName(), port);
 
         ObjectInputStream ois = new ObjectInputStream(gniazdo.getInputStream());
-        this.id = Integer.valueOf((String)  ois.readObject());
+        this.id = (Integer)ois.readObject();
          
         System.out.println("Do³¹czono do gry! Twoje id: " + Integer.toString(this.id));
         ustalStan(new Czeka());
     }
-	
-	public int getEtap(){return etap;};
-	
-	public int getSzanse(){return szanse;}
 	
 	public void odlacz(){
 		
 	}
 	
 	public static void main(String arg[]) throws UnknownHostException, IOException, ClassNotFoundException{
-		int port = 9308;
+		int port = 9611;
 		
 		Gracz gracz = new Gracz(port);
 		gracz.polacz();

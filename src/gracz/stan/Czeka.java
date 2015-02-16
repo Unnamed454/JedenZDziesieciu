@@ -11,12 +11,15 @@ public class Czeka implements StanGracza{
 			
 			if(odSerwera instanceof Czekasz) gracz.ustalStan(new Czeka());
 			if(odSerwera instanceof Odpowiadasz){
-				System.out.println((String)odSerwera.zwrocPowiazanyObiekt());
+				System.out.println("Odpowiadasz na pytanie: " + (String)odSerwera.zwrocPowiazanyObiekt());
 				gracz.ustalStan(new Odpowiada());
 			}
 			if(odSerwera instanceof Odpadasz) gracz.ustalStan(new Przegral());
 			if(odSerwera instanceof Wyznaczasz) gracz.ustalStan(new Wyznacza());
-			if(odSerwera instanceof Aktualizacja) gracz.ustalStan(new Update());
+			if(odSerwera instanceof Aktualizacja){
+				gracz.update((int[][]) odSerwera.zwrocPowiazanyObiekt());
+				gracz.ustalStan(new Czeka());
+			}
 		}
 		catch(Exception e){
 			System.out.println("B³¹d przy odczytywaniu!");

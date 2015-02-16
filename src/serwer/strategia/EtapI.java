@@ -10,6 +10,7 @@ import Polecenia.*;
 public class EtapI implements Strategia{
 	BazaDanych bd = new BazaDanych("cwdb.txt");
 	Rekord aktualnePytanie = new Rekord();
+	Fabryka fabryka = new Fabryka();
 	FabrykaPolecen fabrykaPolecen;
 	Polecenie aktualnePolecenie;
 	int aktualny = 1;
@@ -18,10 +19,10 @@ public class EtapI implements Strategia{
 		for(int i = 0; i < 2; i++){
 			do{
 				try{
-					fabrykaPolecen = new Fabryka().wybierzFabryke("Odpowiadasz");
+					fabrykaPolecen = fabryka.wybierzFabryke("Odpowiadasz");
 					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
 					aktualnePytanie = bd.losujRekord();
-					aktualnePolecenie.ustawObiekt(aktualnePytanie);
+					aktualnePolecenie.ustawObiekt(aktualnePytanie.getPytanie());
 					
 					serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
 					if(aktualnePytanie.sprawdzOdpowiedz(serwer.getGracz(aktualny).getWiadomoscZGniazda()) == true)
@@ -29,27 +30,29 @@ public class EtapI implements Strategia{
 					else
 						serwer.setWynik(aktualny, "odjac", 0);
 					
-					serwer.getGracz(aktualny).wyslij(new Czekasz());
+					fabrykaPolecen = fabryka.wybierzFabryke("Czekasz");
+					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+					serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
 				}
-				catch (Exception e) {
+				catch (Exception e){
 					System.out.println("Odpowiadanie sprawdzanie odp itd");
 				}
 				
 				serwer.powiadamiaj();
-				aktualny += 1;
-			}while(aktualny <= 10);
+			}while(++aktualny <= 10);
 			aktualny = 1;
 		}
 		
 		for(int i = 1; i <= 10; i++){
 			if(serwer.getWynik(i)[0] == 1)
 				try{
-					serwer.getGracz(i).wyslij(new Odpadasz());
+					fabrykaPolecen = fabryka.wybierzFabryke("Odpadasz");
+					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+					serwer.getGracz(i).wyslij(aktualnePolecenie);
 				}
 				catch(IOException e){
 					System.out.println("Wyrzuc gracza! - jakis problem");
 				}
 		}
-		//koniec etapu 1 zaczyna sie etap 2
 	}
 }
