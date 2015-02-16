@@ -1,13 +1,14 @@
 
 package Polecenia;
 
-import Serwer.Rekord;
-import Serwer.BazaDanych;
-
 public class Odpowiadasz implements Polecenie{
-	BazaDanych bd = new BazaDanych("cwdb.txt");
+	String pytanie;
 	
-	public Rekord zwrocPowiazanyObiekt(){
-		return bd.losujRekord();
+	public String zwrocPowiazanyObiekt(){
+		return pytanie;
+	}
+	
+	public void ustawObiekt(Object pytanie){
+		this.pytanie = (String)pytanie;
 	}
 }

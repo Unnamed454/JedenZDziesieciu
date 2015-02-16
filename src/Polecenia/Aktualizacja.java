@@ -1,6 +1,6 @@
 package Polecenia;
 
-public class Grasz implements Polecenie {
+public class Aktualizacja implements Polecenie {
 	String obiekt;
 	
 	public String zwrocPowiazanyObiekt(){
@@ -8,6 +8,6 @@ public class Grasz implements Polecenie {
 	}
 	
 	public void ustawObiekt(Object nazwa){
-		this.obiekt = "Grasz";
+		this.obiekt = "Aktualizacja";
 	}
 }

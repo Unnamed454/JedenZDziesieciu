@@ -20,6 +20,9 @@ public class Fabryka {
 			case "Wyznaczasz":
 				zwracana = new FabrykaWyznaczania();
 				break;
+			case "Aktualizacja":
+				zwracana = new FabrykaAktualizacji();
+				break;
 		}
 		return zwracana;
 	}

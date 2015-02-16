@@ -1,27 +1,30 @@
 package Serwer;
 
-public class Rekord {
+public class Rekord{
 	private String pytanie;
 	private String odpowiedz;
-	Rekord(){
+	
+	public Rekord(){
 		
 	}
+	
 	Rekord(String pytanie, String opdowiedz){
-		this.pytanie =pytanie;
+		this.pytanie = pytanie;
 		this.odpowiedz = opdowiedz;
 	}
+
 	public String getPytanie(){
 		return this.pytanie;
-		
 	}
+	
 	public String getOdpowiedz(){
 		return this.odpowiedz;
-		
 	}
+	
 	public boolean sprawdzOdpowiedz(String odpowiedz){
 		if (odpowiedz.equalsIgnoreCase(this.odpowiedz))
-		return true;
+			return true;
 		else
-		return false;
+			return false;
 	}
 }

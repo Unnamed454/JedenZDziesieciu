@@ -3,6 +3,10 @@ package Serwer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import Polecenia.Fabryka;
+import Polecenia.FabrykaPolecen;
+import Polecenia.Polecenie;
 import Serwer.strategia.*;
 import Serwer.obserwator.Obserwowany;
 
@@ -51,9 +55,15 @@ public class Serwer implements Obserwowany{
     }
     
 	public void powiadamiaj(){
+		FabrykaPolecen fabrykaPolecen = new Fabryka().wybierzFabryke("Aktualizacja");
+		Polecenie polecenie;
+		
+		polecenie = fabrykaPolecen.stworzPolecenie();
+		polecenie.ustawObiekt(tablicaWynikow);
+		
 		for(GraczKomunikacja k : tablicaGraczy){
 			try {
-				k.wyslij(tablicaWynikow);
+				k.wyslij(polecenie);
 			} catch (IOException e) {
 				System.out.println("Wysylanie tablicy - jakis blad!");
 			}
@@ -92,7 +102,7 @@ public class Serwer implements Obserwowany{
 	    
 	    for(int i=0; i<10; i++) {
 	            socket = server.accept();
-	            tablicaGraczy[i] = new GraczKomunikacja(socket,i);
+	            tablicaGraczy[i] = new GraczKomunikacja(socket, i);
 	            System.out.println(i);
 	    }
     }
