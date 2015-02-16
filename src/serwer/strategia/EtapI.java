@@ -29,10 +29,6 @@ public class EtapI implements Strategia{
 						serwer.setWynik(aktualny, "dodac", 0);
 					else
 						serwer.setWynik(aktualny, "odjac", 0);
-					
-					fabrykaPolecen = fabryka.wybierzFabryke("Czekasz");
-					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
-					serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
 				}
 				catch (Exception e){
 					System.out.println("Odpowiadanie sprawdzanie odp itd");
@@ -49,6 +45,8 @@ public class EtapI implements Strategia{
 					fabrykaPolecen = fabryka.wybierzFabryke("Odpadasz");
 					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
 					serwer.getGracz(i).wyslij(aktualnePolecenie);
+					
+					serwer.getGracz(i).setJuzNiegra();
 				}
 				catch(IOException e){
 					System.out.println("Wyrzuc gracza! - jakis problem");

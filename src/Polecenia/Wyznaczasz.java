@@ -7,7 +7,7 @@ public class Wyznaczasz implements Polecenie {
 		return obiekt;
 	}
 	
-	public void ustawObiekt(Object nazwa){
-		this.obiekt = "Wyznaczasz";
+	public void ustawObiekt(Object opis){
+		this.obiekt = (String)opis;
 	}
 }
