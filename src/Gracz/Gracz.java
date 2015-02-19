@@ -36,6 +36,7 @@ public class Gracz implements Obserwator{
 		this.stan = stan;
 	}
 	
+	
 	public void polacz() throws UnknownHostException, IOException, ClassNotFoundException{
         InetAddress host = InetAddress.getLocalHost();
         gniazdo = new Socket(host.getHostName(), port);
