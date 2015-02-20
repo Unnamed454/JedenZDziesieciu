@@ -2,18 +2,13 @@ package Serwer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-
 import Polecenia.Polecenie;
-
-
-//import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class GraczKomunikacja {
+public class GraczKomunikacja{
     private Socket socket;
     private boolean gra = true;
-//    private int gotSomeData;
  
     public String getWiadomoscZGniazda(){
     	String ret = null;
@@ -51,11 +46,6 @@ public class GraczKomunikacja {
     }
  
     public void komunikuj(int id) throws IOException, InterruptedException, ClassNotFoundException{
-    		new ObjectOutputStream(socket.getOutputStream()).writeObject(++id); //wyslanie graczowi jako pierwszej informacji jako ktory gracz zostal podlaczony(jego id)
-        	
-//    		gotSomeData = socket.getInputStream().available();
-//    		if(gotSomeData > 0) {
-//    			String odKlienta = (String) new ObjectInputStream(socket.getInputStream()).readObject();
-//    		}
-    	}
+    	new ObjectOutputStream(socket.getOutputStream()).writeObject(++id);	
     }
+}

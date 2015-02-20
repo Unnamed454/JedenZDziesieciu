@@ -10,17 +10,15 @@ import Polecenia.*;
 public class EtapI implements Strategia{
 	BazaDanych bd = new BazaDanych("cwdb.txt");
 	Rekord aktualnePytanie = new Rekord();
-	Fabryka fabryka = new Fabryka();
-	FabrykaPolecen fabrykaPolecen;
 	Polecenie aktualnePolecenie;
 	int aktualny = 1;
+	
 
-	public void graj(Serwer serwer){
+	public void graj(Serwer serwer){		
 		for(int i = 0; i < 2; i++){
 			do{
 				try{
-					fabrykaPolecen = fabryka.wybierzFabryke("Odpowiadasz");
-					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+					aktualnePolecenie = new Odpowiadasz();
 					aktualnePytanie = bd.losujRekord();
 					aktualnePolecenie.ustawObiekt(aktualnePytanie.getPytanie());
 					
@@ -42,8 +40,7 @@ public class EtapI implements Strategia{
 		for(int i = 1; i <= 10; i++){
 			if(serwer.getWynik(i)[0] == 1)
 				try{
-					fabrykaPolecen = fabryka.wybierzFabryke("Odpadasz");
-					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+					aktualnePolecenie = new Odpadasz();
 					serwer.getGracz(i).wyslij(aktualnePolecenie);
 					
 					serwer.setWynik(i, "odjac", 0);

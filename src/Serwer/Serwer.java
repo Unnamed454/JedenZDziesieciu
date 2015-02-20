@@ -3,35 +3,44 @@ package Serwer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Iterator;
+import java.util.Vector;
 
-import Polecenia.Fabryka;
-import Polecenia.FabrykaPolecen;
+import Polecenia.Aktualizacja;
 import Polecenia.Polecenie;
-
 import Serwer.strategia.*;
+import Serwer.iterator.MIterator;
 import Serwer.obserwator.Obserwowany;
 
 public class Serwer implements Obserwowany{
 	private ServerSocket server;
-    private int port = 9630;
+    private int port = 9633;
     private Socket socket;
     private Strategia etap;
-    private GraczKomunikacja tablicaGraczy[] = new GraczKomunikacja[10];
-	private int tablicaWynikow[][] = {{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0}};
+    private Gracze kolekcjaGraczy = new Gracze();
+	private Vector<Integer[]> tablicaWynikow = new Vector<Integer[]>(10);
 
     public Serwer() throws IOException{
-            server = new ServerSocket(port);
-            server.setReuseAddress(true);
+        server = new ServerSocket(port);
+        server.setReuseAddress(true);
     }
     
+	public void inicjalizujTabliceWynikow(){
+		for(int i = 0; i < 10; i++){
+			tablicaWynikow.add(new Integer[]{3,0});
+		}
+	}
+    
     public GraczKomunikacja getGracz(int id){
-    	return tablicaGraczy[id-1];
+    	return kolekcjaGraczy.get(id-1);
     }
     
     public int ileGra(){
     	int ile = 0;
+    	MIterator it = kolekcjaGraczy.getIterator();
     	
-    	for(GraczKomunikacja k : tablicaGraczy){
+    	while(it.hasNext()){
+    		GraczKomunikacja k = (GraczKomunikacja) it.next();
 			if(k.czyGra() == true) ile++;
 		}
     	return ile;
@@ -56,64 +65,65 @@ public class Serwer implements Obserwowany{
     }
     
 	public void powiadamiaj(){
-		FabrykaPolecen fabrykaPolecen = new Fabryka().wybierzFabryke("Aktualizacja");
-		Polecenie polecenie;
-		
-		polecenie = fabrykaPolecen.stworzPolecenie();
+		Polecenie polecenie = new Aktualizacja();
 		polecenie.ustawObiekt(tablicaWynikow);
 		
-		for(GraczKomunikacja k : tablicaGraczy){
-			try {
+		MIterator it = kolekcjaGraczy.getIterator();
+		
+		while(it.hasNext()){
+			GraczKomunikacja k = (GraczKomunikacja) it.next();
+			try{
 				k.wyslij(polecenie);
-			} catch (Exception e) {
+			}catch (Exception e) {
 				System.out.println("Wysylanie tablicy - jakis blad!");
 			}
 		}
 	}
 
-	public void dodajObserwatora() {
-		// TODO Auto-generated method stub
-		
+	public void dodajObserwatora(GraczKomunikacja komunikacja){
+			kolekcjaGraczy.add(komunikacja);	
 	}
-
-	public void usunObserwatora() {
-		// TODO Auto-generated method stub
-		
+	
+	public void usunObserwatora(int index){
+		kolekcjaGraczy.set(index, null);
 	}
     
-	public int[] getWynik(int id){
-		return tablicaWynikow[id-1];
+	public Integer[] getWynik(int id){
+		return tablicaWynikow.get(id-1);
 	}
 	
 	public void setWynik(int id, String dodac_odjac, int punkty){
 		switch(dodac_odjac){
 			case "dodac":
-				tablicaWynikow[id-1][1] += punkty;
+				tablicaWynikow.get(id-1)[1] += punkty;
 				break;
 				
 			case "odjac":
-				if(--tablicaWynikow[id-1][0] == 0)
-					tablicaGraczy[id-1].setJuzNiegra();
+				if(--tablicaWynikow.get(id-1)[0] == 0)
+					kolekcjaGraczy.get(id-1).setJuzNiegra();
 				break;
 		}
 	}
 	
     public void zbierzGraczy() throws IOException, InterruptedException, ClassNotFoundException{
 	    System.out.println("Waiting for client message...");
+	    MIterator it = kolekcjaGraczy.getIterator();
 	    
-	    for(int i=0; i<10; i++) {
+	    while(it.hasNext()){
 	            socket = server.accept();
-	            tablicaGraczy[i] = new GraczKomunikacja(socket, i);
-	            System.out.println(i+1);
+	            dodajObserwatora(new GraczKomunikacja(socket, it.getIndex()));
+	            System.out.println(it.getIndex()+1);
+	            it.next();
 	    }
     }
     
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
         Serwer serwer = new Serwer();
+        serwer.inicjalizujTabliceWynikow();
         serwer.zbierzGraczy();
 
-	    //serwer.ustawEtap("Etap_I");
-	    //serwer.graj();
+	    serwer.ustawEtap("Etap_I");
+	    serwer.graj();
 	    
 	    serwer.ustawEtap("Etap_II");
 	    serwer.graj();

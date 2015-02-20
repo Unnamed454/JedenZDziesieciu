@@ -1,13 +1,15 @@
 package Polecenia;
 
+import java.util.Vector;
+
 public class Aktualizacja implements Polecenie {
-	int[][] obiekt;
+	Vector<Integer[]> obiekt;
 	
-	public int[][] zwrocPowiazanyObiekt(){
+	public Vector<Integer[]> zwrocPowiazanyObiekt(){
 		return obiekt;
 	}
 	
 	public void ustawObiekt(Object tablica){
-		this.obiekt = (int[][])tablica;
+		this.obiekt = (Vector<Integer[]>)tablica;
 	}
 }

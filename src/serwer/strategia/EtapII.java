@@ -1,10 +1,10 @@
 package Serwer.strategia;
 
 import java.io.PrintStream;
-
-import Polecenia.Fabryka;
-import Polecenia.FabrykaPolecen;
+import Polecenia.Odpadasz;
+import Polecenia.Odpowiadasz;
 import Polecenia.Polecenie;
+import Polecenia.Wyznaczasz;
 import Serwer.BazaDanych;
 import Serwer.Rekord;
 import Serwer.Serwer;
@@ -12,8 +12,6 @@ import Serwer.Serwer;
 public class EtapII implements Strategia{
 	BazaDanych bd = new BazaDanych("cwdb.txt");
 	Rekord aktualnePytanie = new Rekord();
-	Fabryka fabryka = new Fabryka();
-	FabrykaPolecen fabrykaPolecen;
 	Polecenie aktualnePolecenie;
 	int aktualny = 1, stary = -1;
 	
@@ -21,8 +19,7 @@ public class EtapII implements Strategia{
 		for(int i = 1; i <= 10; i++){
 			if(serwer.getGracz(aktualny).czyGra() == true){
 				try{
-					fabrykaPolecen = fabryka.wybierzFabryke("Odpowiadasz");
-					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+					aktualnePolecenie = new Odpowiadasz();
 					aktualnePytanie = bd.losujRekord();
 					aktualnePolecenie.ustawObiekt(aktualnePytanie.getPytanie());
 					
@@ -30,8 +27,7 @@ public class EtapII implements Strategia{
 					if(aktualnePytanie.sprawdzOdpowiedz(serwer.getGracz(aktualny).getWiadomoscZGniazda()) == true){
 						serwer.setWynik(aktualny, "dodac", 0);
 						
-						fabrykaPolecen = fabryka.wybierzFabryke("Wyznaczasz");
-						aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+						aktualnePolecenie = new Wyznaczasz();
 						aktualnePolecenie.ustawObiekt("Wyznacz nastepnego odpowiadajacego");
 						
 						serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
@@ -41,12 +37,10 @@ public class EtapII implements Strategia{
 					else{
 						serwer.setWynik(aktualny, "odjac", 0);
 						if(serwer.getWynik(aktualny)[0] == 0){
-							fabrykaPolecen = fabryka.wybierzFabryke("Odpadasz");
-							aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+							aktualnePolecenie = new Odpadasz();
 							serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
 							
 							serwer.getGracz(aktualny).setJuzNiegra();
-							//TODO jeszcze wywalic z obserwatorow
 						}
 					}
 				}
@@ -69,8 +63,7 @@ public class EtapII implements Strategia{
 				stary = aktualny;
 				aktualny = Integer.valueOf(serwer.getGracz(aktualny).getWiadomoscZGniazda());
 				if(serwer.getGracz(aktualny).czyGra() == true){
-					fabrykaPolecen = fabryka.wybierzFabryke("Odpowiadasz");
-					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+					aktualnePolecenie = new Odpowiadasz();
 					aktualnePytanie = bd.losujRekord();
 					aktualnePolecenie.ustawObiekt(aktualnePytanie.getPytanie());
 					
@@ -78,8 +71,7 @@ public class EtapII implements Strategia{
 					if(aktualnePytanie.sprawdzOdpowiedz(serwer.getGracz(aktualny).getWiadomoscZGniazda()) == true){
 						serwer.setWynik(aktualny, "dodac", 0);
 						
-						fabrykaPolecen = fabryka.wybierzFabryke("Wyznaczasz");
-						aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+						aktualnePolecenie = new Wyznaczasz();
 						aktualnePolecenie.ustawObiekt("Wyznacz nastepnego odpowiadajacego");
 						
 						serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
@@ -88,8 +80,7 @@ public class EtapII implements Strategia{
 						serwer.setWynik(aktualny, "odjac", 0);
 						
 						if(serwer.getWynik(aktualny)[0] == 0){
-							fabrykaPolecen = fabryka.wybierzFabryke("Odpadasz");
-							aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+							aktualnePolecenie = new Odpadasz();
 							serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
 							
 							//TODO jeszcze wywalic z obserwatorow
@@ -97,8 +88,7 @@ public class EtapII implements Strategia{
 						
 						aktualny = stary;
 						
-						fabrykaPolecen = fabryka.wybierzFabryke("Wyznaczasz");
-						aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+						aktualnePolecenie = new Wyznaczasz();
 						aktualnePolecenie.ustawObiekt("Wybrany gracz nie odpowiedzial poprawnie - wyznaczasz ponownie!");
 						
 						serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
@@ -107,8 +97,7 @@ public class EtapII implements Strategia{
 				else{
 					aktualny = stary;
 					
-					fabrykaPolecen = fabryka.wybierzFabryke("Wyznaczasz");
-					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+					aktualnePolecenie = new Wyznaczasz();
 					aktualnePolecenie.ustawObiekt("Gracz o wybranym ID ju¿ nie gra - wyznacz innego");
 					
 					serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
