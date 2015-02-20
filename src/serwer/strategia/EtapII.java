@@ -1,6 +1,6 @@
 package Serwer.strategia;
 
-import java.io.IOException;
+import java.io.PrintStream;
 
 import Polecenia.Fabryka;
 import Polecenia.FabrykaPolecen;
@@ -46,19 +46,17 @@ public class EtapII implements Strategia{
 							serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
 							
 							serwer.getGracz(aktualny).setJuzNiegra();
-							//TODO pewnie jeszcze do wyjebania z obserwatorow
+							//TODO jeszcze wywalic z obserwatorow
 						}
-							
-						break;
 					}
 				}
 				catch (Exception e){
 					System.out.println("Odpowiadanie sprawdzanie odp itd");
 				}
-				serwer.powiadamiaj();
+			serwer.powiadamiaj();
 			}
 			
-			if(aktualny == 10) aktualny = 1;
+			if(aktualny == 10) {aktualny = 1; i = 0;}
 			else
 				aktualny++;
 			
@@ -94,11 +92,16 @@ public class EtapII implements Strategia{
 							aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
 							serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
 							
-							serwer.getGracz(aktualny).setJuzNiegra();
-							//TODO pewnie jeszcze do wyjebania z obserwatorow
+							//TODO jeszcze wywalic z obserwatorow
 						}
 						
 						aktualny = stary;
+						
+						fabrykaPolecen = fabryka.wybierzFabryke("Wyznaczasz");
+						aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
+						aktualnePolecenie.ustawObiekt("Wybrany gracz nie odpowiedzial poprawnie - wyznaczasz ponownie!");
+						
+						serwer.getGracz(aktualny).wyslij(aktualnePolecenie);
 					}
 				}
 				else{
@@ -113,7 +116,7 @@ public class EtapII implements Strategia{
 				serwer.powiadamiaj();
 			}
 			catch(Exception e){
-				System.out.println("cos zle przy wyznaczaniu");
+				e.printStackTrace(new PrintStream(System.out));
 			}
 		}
 		//koniec etapu 2

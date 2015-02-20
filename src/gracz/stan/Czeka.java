@@ -14,7 +14,7 @@ public class Czeka implements StanGracza{
 				System.out.println("Odpowiadasz na pytanie: " + (String)odSerwera.zwrocPowiazanyObiekt());
 				gracz.ustalStan(new Odpowiada());
 			}
-			if(odSerwera instanceof Odpadasz) gracz.ustalStan(new Przegral());
+			if(odSerwera instanceof Odpadasz) gracz.ustalStan(new Czeka());//Przegral());
 			if(odSerwera instanceof Wyznaczasz) {
 				System.out.println((String)odSerwera.zwrocPowiazanyObiekt());
 				gracz.ustalStan(new Wyznacza());

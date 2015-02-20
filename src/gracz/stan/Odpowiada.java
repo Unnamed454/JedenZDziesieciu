@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 public class Odpowiada implements StanGracza {
 	public void graj(Gracz gracz){		
+		gracz.wyswietlWyniki();
+		
 		Scanner scanner = new Scanner(System.in);
 		String odpowiedz = scanner.nextLine();
 		//scanner.close();

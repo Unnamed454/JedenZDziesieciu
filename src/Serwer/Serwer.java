@@ -13,7 +13,7 @@ import Serwer.obserwator.Obserwowany;
 
 public class Serwer implements Obserwowany{
 	private ServerSocket server;
-    private int port = 9611;
+    private int port = 9630;
     private Socket socket;
     private Strategia etap;
     private GraczKomunikacja tablicaGraczy[] = new GraczKomunikacja[10];
@@ -32,7 +32,7 @@ public class Serwer implements Obserwowany{
     	int ile = 0;
     	
     	for(GraczKomunikacja k : tablicaGraczy){
-			if(k.czyGra() == true) ile += 1;
+			if(k.czyGra() == true) ile++;
 		}
     	return ile;
     }
@@ -90,10 +90,10 @@ public class Serwer implements Obserwowany{
 			case "dodac":
 				tablicaWynikow[id-1][1] += punkty;
 				break;
+				
 			case "odjac":
-				tablicaWynikow[id-1][0] -= 1;
-				if(tablicaWynikow[id-1][0] == 0)
-					getGracz(id-1).setJuzNiegra();
+				if(--tablicaWynikow[id-1][0] == 0)
+					tablicaGraczy[id-1].setJuzNiegra();
 				break;
 		}
 	}
@@ -112,8 +112,8 @@ public class Serwer implements Obserwowany{
         Serwer serwer = new Serwer();
         serwer.zbierzGraczy();
 
-	    serwer.ustawEtap("Etap_I");
-	    serwer.graj();
+	    //serwer.ustawEtap("Etap_I");
+	    //serwer.graj();
 	    
 	    serwer.ustawEtap("Etap_II");
 	    serwer.graj();

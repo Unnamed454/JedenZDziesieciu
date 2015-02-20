@@ -9,17 +9,16 @@ public class Wyznacza implements StanGracza{
 	int nastepny;
 	public void graj(Gracz gracz){
 		do{
-			System.out.println("Podaj nastepnego odpowiadaj¹cego(1-10)");
+			System.out.println("Podaj nastepnego odpowiadaj¹cego(1-10) !nie mo¿na wskazaæ siebie!");
 			
 			Scanner scanner = new Scanner(System.in);
 			String odpowiedz = scanner.nextLine();
-			scanner.close();
 			
 			nastepny = Integer.valueOf(odpowiedz);
-		}while(nastepny > 0 && nastepny <= 10);
+		}while(nastepny <= 0 && nastepny > 10 || nastepny == gracz.getID());
 		
 		try{
-			new ObjectOutputStream(gracz.getGniazdo().getOutputStream()).writeObject(nastepny);
+			new ObjectOutputStream(gracz.getGniazdo().getOutputStream()).writeObject(Integer.toString(nastepny));
 		}
 		catch(Exception e){
 			System.out.println("B³¹d przy przesy³aniu odpowiedzi!");

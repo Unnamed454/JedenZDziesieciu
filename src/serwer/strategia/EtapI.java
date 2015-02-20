@@ -46,11 +46,12 @@ public class EtapI implements Strategia{
 					aktualnePolecenie = fabrykaPolecen.stworzPolecenie();
 					serwer.getGracz(i).wyslij(aktualnePolecenie);
 					
-					serwer.getGracz(i).setJuzNiegra();
+					serwer.setWynik(i, "odjac", 0);
 				}
 				catch(IOException e){
 					System.out.println("Wyrzuc gracza! - jakis problem");
 				}
 		}
+		serwer.powiadamiaj();
 	}
 }

@@ -13,8 +13,8 @@ public class BazaDanych {
 			Scanner in = new Scanner(new FileReader(nazwaPliku));
 			
 			while(in.hasNext()){
-				String pyt = in.nextLine();
 				String odp = in.nextLine();
+				String pyt = in.nextLine();				
 				pytania.add(new Rekord(pyt,odp));
 			}
 		}

@@ -12,7 +12,7 @@ import java.net.Socket;
 
 public class GraczKomunikacja {
     private Socket socket;
-    private boolean gra;
+    private boolean gra = true;
 //    private int gotSomeData;
  
     public String getWiadomoscZGniazda(){

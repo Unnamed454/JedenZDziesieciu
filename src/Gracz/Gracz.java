@@ -10,12 +10,20 @@ public class Gracz implements Obserwator{
 	
 	private int port;
 	private int id;
-	private int tablicaWynikow[][] = new int[10][2];
+	private int tablicaWynikow[][] = {{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0},{3,0}};
 	
 	Socket gniazdo;
 	
 	Gracz(int port){
 		this.port = port;
+	}
+	
+	public void wyswietlWyniki(){
+		System.out.println("Dotychczasowe wyniki:\n");
+		
+		for(int i = 0; i < 10; i++){
+			System.out.println("Gracz nr " + Integer.toString(i + 1) + " -\tSzanse: " + Integer.toString(tablicaWynikow[i][0]));
+		}
 	}
 	
 	public void update(int[][] integers){
@@ -52,8 +60,12 @@ public class Gracz implements Obserwator{
 		
 	}
 	
+	public int getID(){
+		return id;
+	}
+	
 	public static void main(String arg[]) throws UnknownHostException, IOException, ClassNotFoundException{
-		int port = 9611;
+		int port = 9630;
 		
 		Gracz gracz = new Gracz(port);
 		gracz.polacz();
