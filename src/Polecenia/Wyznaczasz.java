@@ -1,13 +1,15 @@
 package Polecenia;
 
-public class Wyznaczasz implements Polecenie {
+public class Wyznaczasz implements Polecenie<String> {
 	String obiekt;
-	
-	public String zwrocPowiazanyObiekt(){
+
+	 public String zwrocPowiazanyObiekt(){
 		return obiekt;
 	}
 	
-	public void ustawObiekt(Object opis){
-		this.obiekt = (String)opis;
+
+	 public void ustawObiekt(String powiazany) {
+		this.obiekt = powiazany;
+		
 	}
 }

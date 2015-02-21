@@ -2,7 +2,8 @@ package Polecenia;
 
 import java.io.Serializable;
 
-public interface Polecenie extends Serializable{
-	public Object zwrocPowiazanyObiekt();
-	public void ustawObiekt(Object powiazany);
+public interface Polecenie<V> extends Serializable{
+	  public V zwrocPowiazanyObiekt();
+	 public void ustawObiekt(V powiazany);
+	
 }
