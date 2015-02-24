@@ -10,7 +10,7 @@ import Polecenia.*;
 public class EtapI implements Strategia{
 	BazaDanych bd = new BazaDanych("cwdb.txt");
 	Rekord aktualnePytanie = new Rekord();
-	Polecenie aktualnePolecenie;
+	Polecenie<String> aktualnePolecenie;
 	int aktualny = 1;
 	
 

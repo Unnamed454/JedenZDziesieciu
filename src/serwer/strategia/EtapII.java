@@ -1,6 +1,7 @@
 package Serwer.strategia;
 
 import java.io.PrintStream;
+
 import Polecenia.Odpadasz;
 import Polecenia.Odpowiadasz;
 import Polecenia.Polecenie;
@@ -12,7 +13,7 @@ import Serwer.Serwer;
 public class EtapII implements Strategia{
 	BazaDanych bd = new BazaDanych("cwdb.txt");
 	Rekord aktualnePytanie = new Rekord();
-	Polecenie aktualnePolecenie;
+	Polecenie<String> aktualnePolecenie;
 	int aktualny = 1, stary = -1;
 	
 	public void graj(Serwer serwer){

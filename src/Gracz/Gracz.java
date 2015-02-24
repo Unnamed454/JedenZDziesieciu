@@ -21,6 +21,93 @@ public class Gracz implements Obserwator{
 	private Vector<Integer[]> tablicaWynikow= new Vector<Integer[]>(10);
 	private Scanner scanner = new Scanner(System.in);
 	
+	public class Czeka implements StanGracza{
+		@SuppressWarnings("unchecked")
+		public void graj(){
+			try{
+				Polecenie<?> odSerwera = (Polecenie<?>) new ObjectInputStream(getGniazdo().getInputStream()).readObject();
+				
+				if(odSerwera instanceof Czekasz) ustalStan(new Czeka());
+				if(odSerwera instanceof Odpowiadasz){
+					System.out.println("Odpowiadasz na pytanie: " + (String)odSerwera.zwrocPowiazanyObiekt());
+					ustalStan(new Odpowiada());
+				}
+				if(odSerwera instanceof Odpadasz) ustalStan(new Przegral());
+				if(odSerwera instanceof Wyznaczasz) {
+					System.out.println((String)odSerwera.zwrocPowiazanyObiekt());
+					ustalStan(new Wyznacza());
+				}
+				if(odSerwera instanceof Aktualizacja){
+					update((Vector<Integer[]>) odSerwera.zwrocPowiazanyObiekt());
+					ustalStan(new Czeka());
+				}
+			}
+			catch(Exception e){
+				System.out.println("B³¹d przy odczytywaniu!");
+			}
+		}
+	}
+	
+	public class Odpowiada implements StanGracza{
+		public void graj(){
+			wyswietlWyniki();
+			
+			String odpowiedz = scanner.nextLine();
+			
+			try{
+				new ObjectOutputStream(getGniazdo().getOutputStream()).writeObject(odpowiedz);
+			}
+			catch(Exception e){
+				System.out.println("B³¹d przy Odpowiadaniu!");
+			}
+			
+			ustalStan(new Czeka());
+		}
+	}
+	
+	public class Wyznacza implements StanGracza{
+		public void graj(){
+			int nastepny;
+			
+			do{
+				System.out.println("Podaj nastepnego odpowiadaj¹cego(1-10) !nie mo¿na wskazaæ siebie!");
+				
+				
+				String odpowiedz = scanner.nextLine();
+				
+				nastepny = Integer.valueOf(odpowiedz);
+			}while(nastepny <= 0 && nastepny > 10 || nastepny == getID());
+			
+			try{
+				new ObjectOutputStream(getGniazdo().getOutputStream()).writeObject(Integer.toString(nastepny));
+			}
+			catch(Exception e){
+				System.out.println("B³¹d przy przesy³aniu odpowiedzi!");
+			}
+			
+			ustalStan(new Czeka());
+		}
+	}
+	
+	public class Update implements StanGracza{
+		public void graj(){
+			try {
+				@SuppressWarnings("unchecked")
+				Polecenie<Vector<Integer[]>> odSerwera = (Polecenie<Vector<Integer[]>>) new ObjectInputStream(getGniazdo().getInputStream()).readObject();
+				update((Vector<Integer[]>) odSerwera.zwrocPowiazanyObiekt());
+			}
+			catch (Exception e) {
+				System.out.println("Blad przy odbieraniu tablicy wynikow!");
+			}
+			ustalStan(new Czeka());
+		}
+	}
+	public class Przegral implements StanGracza{
+		public void graj(){
+			odlacz();
+		}
+	}
+	
 	Socket gniazdo;
 	
 	Gracz(int port){
@@ -59,88 +146,6 @@ public class Gracz implements Obserwator{
 		this.stan = stan;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void graj(){
-		while(true){
-			if(stan instanceof Czeka){
-				try{
-					Polecenie odSerwera = (Polecenie) new ObjectInputStream(getGniazdo().getInputStream()).readObject();
-					
-					if(odSerwera instanceof Czekasz) ustalStan(new Czeka());
-					if(odSerwera instanceof Odpowiadasz){
-						System.out.println("Odpowiadasz na pytanie: " + (String)odSerwera.zwrocPowiazanyObiekt());
-						ustalStan(new Odpowiada());
-					}
-					if(odSerwera instanceof Odpadasz) ustalStan(new Przegral());
-					if(odSerwera instanceof Wyznaczasz) {
-						System.out.println((String)odSerwera.zwrocPowiazanyObiekt());
-						ustalStan(new Wyznacza());
-					}
-					if(odSerwera instanceof Aktualizacja){
-						update((Vector<Integer[]>) odSerwera.zwrocPowiazanyObiekt());
-						ustalStan(new Czeka());
-					}
-				}
-				catch(Exception e){
-					System.out.println("B³¹d przy odczytywaniu!");
-				}
-			}
-			
-			if(stan instanceof Odpowiada){
-				wyswietlWyniki();
-				
-				String odpowiedz = scanner.nextLine();
-				
-				try{
-					new ObjectOutputStream(getGniazdo().getOutputStream()).writeObject(odpowiedz);
-				}
-				catch(Exception e){
-					
-				}
-				
-				ustalStan(new Czeka());
-			}
-			
-			if(stan instanceof Wyznacza){
-				int nastepny;
-				
-				do{
-					System.out.println("Podaj nastepnego odpowiadaj¹cego(1-10) !nie mo¿na wskazaæ siebie!");
-					
-					
-					String odpowiedz = scanner.nextLine();
-					
-					nastepny = Integer.valueOf(odpowiedz);
-				}while(nastepny <= 0 && nastepny > 10 || nastepny == getID());
-				
-				try{
-					new ObjectOutputStream(getGniazdo().getOutputStream()).writeObject(Integer.toString(nastepny));
-				}
-				catch(Exception e){
-					System.out.println("B³¹d przy przesy³aniu odpowiedzi!");
-				}
-				
-				ustalStan(new Czeka());
-			}
-			
-			if(stan instanceof Update){
-				try {
-					Polecenie odSerwera = (Polecenie) new ObjectInputStream(getGniazdo().getInputStream()).readObject();
-					update((Vector<Integer[]>) odSerwera.zwrocPowiazanyObiekt());
-				}
-				catch (Exception e) {
-					System.out.println("Blad przy odbieraniu tablicy wynikow!");
-				}
-				ustalStan(new Czeka());
-			}
-			
-			if(stan instanceof Przegral){
-				odlacz();
-				break;
-			}
-		}
-	}
-	
 	public void polacz() throws UnknownHostException, IOException, ClassNotFoundException{
         InetAddress host = InetAddress.getLocalHost();
         gniazdo = new Socket(host.getHostName(), port);
@@ -169,7 +174,9 @@ public class Gracz implements Obserwator{
 		Gracz gracz = new Gracz(port);
 		gracz.inicjalizujTabliceWynikow();
 		gracz.polacz();
-		gracz.graj();
-		gracz.odlacz();
+		
+		while(true){
+			gracz.stan.graj();
+		}
 	}
 }

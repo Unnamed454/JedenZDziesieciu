@@ -3,7 +3,6 @@ package Serwer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Iterator;
 import java.util.Vector;
 
 import Polecenia.Aktualizacja;
@@ -65,7 +64,7 @@ public class Serwer implements Obserwowany{
     }
     
 	public void powiadamiaj(){
-		Polecenie polecenie = new Aktualizacja();
+		Polecenie<Vector<Integer[]>> polecenie = new Aktualizacja();
 		polecenie.ustawObiekt(tablicaWynikow);
 		
 		MIterator it = kolekcjaGraczy.getIterator();
@@ -81,7 +80,7 @@ public class Serwer implements Obserwowany{
 	}
 
 	public void dodajObserwatora(GraczKomunikacja komunikacja){
-			kolekcjaGraczy.add(komunikacja);	
+		kolekcjaGraczy.add(komunikacja);	
 	}
 	
 	public void usunObserwatora(int index){
@@ -122,8 +121,8 @@ public class Serwer implements Obserwowany{
         serwer.inicjalizujTabliceWynikow();
         serwer.zbierzGraczy();
 
-	    serwer.ustawEtap("Etap_I");
-	    serwer.graj();
+	    //serwer.ustawEtap("Etap_I");
+	    //serwer.graj();
 	    
 	    serwer.ustawEtap("Etap_II");
 	    serwer.graj();

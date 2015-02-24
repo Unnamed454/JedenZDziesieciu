@@ -35,7 +35,7 @@ public class Gracze implements Container{
                 return false;
         }
         
-        public Object next(){
+        public GraczKomunikacja next(){
             if (this.hasNext())
                 return komunikacjaGraczy[position++];
             else

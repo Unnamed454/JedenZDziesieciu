@@ -36,7 +36,7 @@ public class GraczKomunikacja{
         this.komunikuj(id);
     }
     
-    public void wyslij(Polecenie polecenie) throws IOException{
+    public void wyslij(Polecenie<?> polecenie) throws IOException{
     	try{
     		new ObjectOutputStream(socket.getOutputStream()).writeObject(polecenie);
     	}
